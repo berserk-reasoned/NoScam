@@ -185,6 +185,75 @@ const app = {
       timestamp: Date.now()
     });
     localStorage.setItem(`db_alerts_${state.uid}`, JSON.stringify(alerts));
+  },
+
+  // --- USER DASHBOARD NAVIGATION & MOCK FEATURES ---
+  switchTab(tabName) {
+    // Hide all tabs
+    document.getElementById('tab-home').classList.add('hidden');
+    document.getElementById('tab-scan').classList.add('hidden');
+    document.getElementById('tab-panic').classList.add('hidden');
+    
+    // Remove active class from all nav items
+    document.getElementById('nav-home').classList.remove('active');
+    document.getElementById('nav-scan').classList.remove('active');
+    document.getElementById('nav-panic').classList.remove('active');
+    
+    // Show selected tab
+    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+    document.getElementById(`nav-${tabName}`).classList.add('active');
+  },
+
+  simulateScan() {
+    const input = document.getElementById('scan-url-input').value;
+    if (!input) return showToast("Please enter a URL");
+    
+    const resultDiv = document.getElementById('scan-result');
+    const icon = document.getElementById('scan-icon');
+    const title = document.getElementById('scan-title');
+    
+    resultDiv.classList.remove('hidden');
+    resultDiv.style.background = "rgba(0,0,0,0.5)";
+    icon.innerText = "⏳";
+    title.innerText = "Analyzing...";
+    title.style.color = "var(--text-main)";
+
+    setTimeout(() => {
+      // Mock result: if it has "login" or "bank", it's suspicious
+      if (input.toLowerCase().includes('login') || input.toLowerCase().includes('bank')) {
+        resultDiv.style.background = "rgba(244, 63, 94, 0.1)";
+        icon.innerText = "⚠️";
+        title.innerText = "Phishing Detected!";
+        title.style.color = "var(--accent)";
+        showToast("Warning! This link looks dangerous.");
+        
+        // Alert guardian
+        const alerts = JSON.parse(localStorage.getItem(`db_alerts_${state.uid}`) || '[]');
+        alerts.push({
+          type: "Phishing Attempt",
+          message: `User scanned a dangerous link: ${input}`,
+          timestamp: Date.now()
+        });
+        localStorage.setItem(`db_alerts_${state.uid}`, JSON.stringify(alerts));
+
+      } else {
+        resultDiv.style.background = "rgba(74, 222, 128, 0.1)";
+        icon.innerText = "✅";
+        title.innerText = "Looks Safe";
+        title.style.color = "var(--primary)";
+      }
+    }, 1500);
+  },
+
+  triggerPanicAlert() {
+    showToast("Panic Alert Sent to Guardian!");
+    const alerts = JSON.parse(localStorage.getItem(`db_alerts_${state.uid}`) || '[]');
+    alerts.push({
+      type: "🚨 PANIC BUTTON",
+      message: "USER HAS PRESSED THE PANIC BUTTON. Immediate assistance required.",
+      timestamp: Date.now()
+    });
+    localStorage.setItem(`db_alerts_${state.uid}`, JSON.stringify(alerts));
   }
 };
 

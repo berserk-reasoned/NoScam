@@ -98,46 +98,96 @@
 
     <!-- Screen 5: User Dashboard -->
     <div id="screen-user-dash" class="screen hidden" style="padding-bottom: 80px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h1>Dashboard</h1>
-        <div style="background: rgba(74, 222, 128, 0.2); color: var(--primary); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Protected</div>
-      </div>
       
-      <div class="glass-card mb-6" style="background: linear-gradient(135deg, rgba(74,222,128,0.1) 0%, rgba(255,255,255,0.02) 100%); border-color: rgba(74,222,128,0.2);">
-        <h2>Today's Stats</h2>
-        <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
-          <div class="text-center">
-            <div style="font-size: 2rem; font-weight: 700; color: var(--text-main);">0</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Unknown Calls</div>
+      <!-- HOME TAB -->
+      <div id="tab-home">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h1>Dashboard</h1>
+          <div style="background: rgba(74, 222, 128, 0.2); color: var(--primary); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Protected</div>
+        </div>
+        
+        <div class="glass-card mb-6" style="background: linear-gradient(135deg, rgba(74,222,128,0.1) 0%, rgba(255,255,255,0.02) 100%); border-color: rgba(74,222,128,0.2);">
+          <h2>Today's Stats</h2>
+          <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+            <div class="text-center">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--text-main);">0</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Unknown Calls</div>
+            </div>
+            <div class="text-center">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--text-main);">2</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Links Blocked</div>
+            </div>
           </div>
-          <div class="text-center">
-            <div style="font-size: 2rem; font-weight: 700; color: var(--text-main);">2</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Links Blocked</div>
+        </div>
+
+        <div class="glass-card mb-6">
+          <h3 style="margin-bottom: 1rem; color: var(--accent);">Mock Native Actions</h3>
+          <button class="btn btn-outline mb-4" onclick="app.triggerLinkAlert()">
+            simulate: Detect Suspicious Link
+          </button>
+          <button class="btn btn-outline" onclick="app.triggerBankingBlock()">
+            simulate: Banking App Overlay
+          </button>
+        </div>
+      </div>
+
+      <!-- SCAN TAB -->
+      <div id="tab-scan" class="hidden">
+        <div style="margin-bottom: 1.5rem;">
+          <h1>Scan URL</h1>
+          <p>Paste a suspicious link to check if it's safe.</p>
+        </div>
+        
+        <div class="glass-card">
+          <div class="input-group">
+            <input type="text" id="scan-url-input" class="input-field" placeholder="https://example.com/login">
+          </div>
+          <button class="btn btn-primary mb-4" onclick="app.simulateScan()">Analyze Link</button>
+          
+          <div id="scan-result" class="hidden text-center" style="padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;" id="scan-icon">⚠️</div>
+            <h3 id="scan-title">Analyzing...</h3>
           </div>
         </div>
       </div>
 
-      <div class="glass-card mb-6">
-        <h3 style="margin-bottom: 1rem; color: var(--accent);">Mock Native Actions</h3>
-        <button class="btn btn-outline mb-4" onclick="app.triggerLinkAlert()">
-          simulate: Detect Suspicious Link
-        </button>
-        <button class="btn btn-outline" onclick="app.triggerBankingBlock()">
-          simulate: Banking App Overlay
-        </button>
+      <!-- PANIC TAB -->
+      <div id="tab-panic" class="hidden">
+        <div style="margin-bottom: 1.5rem; text-align: center;">
+          <h1 style="color: var(--accent);">Help! I'm Scammed</h1>
+          <p>Don't panic. Follow these steps immediately.</p>
+        </div>
+        
+        <div class="glass-card mb-4" style="border-left: 4px solid var(--accent);">
+          <h2>1. Block Cards</h2>
+          <p style="margin-bottom: 1rem;">Instantly freeze your banking and credit cards to prevent further unauthorized transactions.</p>
+          <button class="btn btn-outline" onclick="app.triggerBankingBlock()">Freeze Accounts Now</button>
+        </div>
+
+        <div class="glass-card mb-4" style="border-left: 4px solid var(--secondary);">
+          <h2>2. Alert Guardian</h2>
+          <p style="margin-bottom: 1rem;">Send a high-priority alert to your linked Guardian with your live location.</p>
+          <button class="btn btn-secondary" onclick="app.triggerPanicAlert()">Send Panic Alert</button>
+        </div>
+
+        <div class="glass-card" style="border-left: 4px solid #facc15;">
+          <h2>3. Call Cyber Police</h2>
+          <p style="margin-bottom: 1rem;">Dial 1930 to report cyber fraud immediately.</p>
+          <button class="btn btn-outline">Call 1930</button>
+        </div>
       </div>
 
       <!-- User Bottom Nav -->
       <div class="bottom-nav" style="position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;">
-        <div class="nav-item active">
+        <div class="nav-item active" id="nav-home" onclick="app.switchTab('home')">
           <div class="nav-icon">🏠</div>
           <span>Home</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-scan" onclick="app.switchTab('scan')">
           <div class="nav-icon">🔍</div>
           <span>Scan</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-panic" onclick="app.switchTab('panic')">
           <div class="nav-icon">🚨</div>
           <span style="color: var(--accent);">Panic</span>
         </div>
