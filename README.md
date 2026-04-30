@@ -1,3 +1,7 @@
-Please click on index.html to preview.
+PLEASE DOWNLOAD THE ZIP FILE.
 
-open in both gaurdian and user mode to check connection.
+EXTRACT IT.
+
+OPEN AND DOUBLE CLICK ON INDEX.HTML.
+
+YOU CAN REVIEW BOTH GAURDIAN AND USER MODE AND LINK BOTH USING THE KEY PROVIDED.
